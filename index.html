@@ -1,0 +1,253 @@
+<!DOCTYPE html><html><body>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baby Shower María Fernanda</title>
+
+<style>
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    font-family:'Segoe UI', sans-serif;
+    text-align:center;
+    overflow-x:hidden;
+    background-color:#fdf8f2;
+    background-image:
+    radial-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+    radial-gradient(rgba(0,0,0,0.02) 1px, transparent 1px);
+    background-size:4px 4px, 6px 6px;
+}
+
+/* PANTALLA INICIAL */
+.overlay{
+    position:fixed;
+    width:100%;
+    height:100vh;
+    background:#fdf8f2;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    z-index:9999;
+    cursor:pointer;
+    transition:opacity 0.8s ease;
+}
+
+.overlay h1{
+    font-size:22px;
+    color:#b76e79;
+    margin-bottom:10px;
+}
+
+.overlay span{
+    font-size:40px;
+    animation:latido 1.5s infinite;
+}
+
+@keyframes latido{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.2);}
+    100%{transform:scale(1);}
+}
+
+.hidden{
+    opacity:0;
+    pointer-events:none;
+}
+
+/* CONTENIDO */
+.container{
+    max-width:650px;
+    margin:auto;
+    padding:20px;
+    position:relative;
+    z-index:2; /* 👈 contenido encima */
+}
+
+img{
+    width:100%;
+    border-radius:25px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.15);
+}
+
+.button{
+    display:inline-block;
+    margin:12px 8px;
+    padding:14px 28px;
+    font-size:16px;
+    border-radius:50px;
+    text-decoration:none;
+    font-weight:bold;
+    transition:0.3s ease;
+}
+
+.whatsapp{ background:#25D366; color:white; }
+.location{ background:#d8a7b1; color:white; }
+
+.whatsapp:hover,
+.location:hover{
+    transform:scale(1.08);
+}
+
+.countdown{
+    margin:25px 0;
+    font-size:20px;
+    font-weight:bold;
+    color:#b76e79;
+}
+
+.timer span{
+    display:inline-block;
+    margin:6px 8px;
+}
+
+.music-btn{
+    margin-top:15px;
+    padding:10px 20px;
+    border:none;
+    border-radius:30px;
+    background:#b76e79;
+    color:white;
+    font-size:14px;
+    cursor:pointer;
+}
+
+/* FLORES DETRÁS */
+.flower{
+    position:fixed;
+    top:-40px;
+    font-size:22px;
+    animation:fall linear infinite;
+    pointer-events:none;
+    z-index:0; /* 👈 detrás */
+    opacity:0.6;
+}
+
+@keyframes fall{
+    to{
+        transform:translateY(110vh) rotate(360deg);
+    }
+}
+
+@media(max-width:480px){
+    .button{
+        display:block;
+        width:85%;
+        margin:10px auto;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- PANTALLA TOCA PARA ABRIR -->
+<div class="overlay" id="overlay">
+    <h1>Toca para abrir la invitación</h1>
+    <span>💌</span>
+</div>
+
+<div class="container">
+
+    <img src="imagen.jpg" alt="Invitación">
+
+    <div class="countdown">
+        Faltan:
+        <div class="timer" id="timer"></div>
+    </div>
+
+    <div>
+        <a class="button whatsapp"
+           href="https://wa.me/5218117991828?text=Hola%20Confirmo%20mi%20asistencia%20al%20Baby%20Shower%20de%20María%20Fernanda"
+           target="_blank">
+           ✅ Confirmar asistencia
+        </a>
+
+        <a class="button location"
+           href="https://maps.app.goo.gl/k6TbNG2WGdRhtFZw8?g_st=ic"
+           target="_blank">
+           📍 Ver ubicación
+        </a>
+    </div>
+
+    <button class="music-btn" onclick="toggleMusic()" id="musicButton">
+        🔇 Pausar música
+    </button>
+
+</div>
+
+<audio id="bgMusic" loop preload="auto" playsinline>
+    <source src="musica.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+// CONTADOR
+var eventDate = new Date("May 1, 2026 18:00:00").getTime();
+
+setInterval(function(){
+  var now = new Date().getTime();
+  var distance = eventDate - now;
+
+  var days = Math.floor(distance/(1000*60*60*24));
+  var hours = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+  var minutes = Math.floor((distance%(1000*60*60))/(1000*60));
+  var seconds = Math.floor((distance%(1000*60))/1000);
+
+  document.getElementById("timer").innerHTML =
+  "<span>"+days+" días</span>"+
+  "<span>"+hours+" hrs</span>"+
+  "<span>"+minutes+" min</span>"+
+  "<span>"+seconds+" seg</span>";
+
+},1000);
+
+// MUSICA
+var music = document.getElementById("bgMusic");
+var overlay = document.getElementById("overlay");
+var musicButton = document.getElementById("musicButton");
+music.volume = 0.8;
+
+overlay.addEventListener("click", function(){
+    music.play();
+    overlay.classList.add("hidden");
+});
+
+function toggleMusic() {
+    if (music.paused) {
+        music.play();
+        musicButton.innerHTML = "🔇 Pausar música";
+    } else {
+        music.pause();
+        musicButton.innerHTML = "🔊 Activar música";
+    }
+}
+
+// FLORES
+var emojis=["🌸","🌼","🌷","🌹","💐"];
+
+for(let i=0;i<35;i++){
+    let flower=document.createElement("div");
+    flower.className="flower";
+    flower.innerHTML=emojis[Math.floor(Math.random()*emojis.length)];
+    flower.style.left=Math.random()*100+"vw";
+    flower.style.animationDuration=(6+Math.random()*6)+"s";
+    document.body.appendChild(flower);
+}
+</script>
+
+</body>
+</html>
+</body>
+
+<style>
+
+</style>
+
+<script>
+
+</script></html>
